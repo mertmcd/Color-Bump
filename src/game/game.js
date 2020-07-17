@@ -82,7 +82,7 @@ class Game {
       position: this.path.position,
       mass: 0,
     });
-    let pathShape = new Box(new Vec3(5, 1, 25)); //cannonjs
+    let pathShape = new Box(new Vec3(5, 1, 75)); //cannonjs
     this.path.body.addShape(pathShape);
     main.world.add(this.path.body);
     //console.log(this.path);
@@ -153,10 +153,10 @@ class Game {
 
     // Placing boxes on the platform
 
-    for (let i = 0; i < columns; i++) {
-      for (let j = 0; j < rows; j++) {
-        let x = 3.7 - i * (boxSize.x * 2.5);
-        let z = 10 + j * (boxSize.z * 2.5);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        let x = 3.7 - j * (boxSize.x * 2.5);
+        let z = 10 + i * (boxSize.z * 2.5);
         let y = 2;
 
         boxGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
@@ -260,15 +260,13 @@ class Game {
       let dx = controls.prevX - controls.mouseX;
       let dz = 1;
 
-      dx *= 0.1;
+      dx *= 0.2;
       dz *= 0.5;
 
       this.ball.body.velocity.x += dx;
-      this.ball.body.velocity.z += dz;
+      // this.ball.body.velocity.z += dz;
       this.cam.position.z += dz / 4;
     }
-
-    // this.level.update(ratio, delta);
 
     confettiMaker && confettiMaker.update();
 
