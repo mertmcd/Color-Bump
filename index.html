@@ -1,96 +1,71 @@
- <!DOCTYPE html>
- <html>
-     <head>
-         <meta charset="utf-8">
-         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
 
+    <script>
+      var loaded = 5,
+        total = 100;
 
+      function loadUpdate() {
+        loaded += 0.2;
+        var bar = document.getElementById("bar");
 
-         <script>
-            var loaded=5,total=100;
-            
-            
-            function loadUpdate(){
-                loaded+=0.2;
-                var bar= document.getElementById("bar");
+        if (loaded > 101) {
+          loaded = 101;
+        } else {
+          setTimeout(loadUpdate, 50);
+        }
+        if (bar) {
+          bar.style.width = loaded + "%";
+        }
+      }
+      setTimeout(loadUpdate, 50);
+    </script>
 
-                if(loaded>101){
-                    loaded=101;
-                }
-                else{
-                    setTimeout(loadUpdate,50);
-                }
-                if(bar){
-                    bar.style.width=loaded+"%";
-                }
-                    
-            };
-            setTimeout(loadUpdate,50);
-        </script>
-         
-         <style>
-             @font-face {
-                font-family: 'ui-font';
-                src: url('assets/LilitaOne-Regular.ttf');
-             }
+    <style>
+      @font-face {
+        font-family: "ui-font";
+        src: url("assets/LilitaOne-Regular.ttf");
+      }
+    </style>
+  </head>
+  <body style="background: #fde636; touch-action: none;">
+    <div style="font-family: ui-font;">.</div>
+    <div id="ui"></div>
 
+    <div id="preloader-gear">
+      <div id="gears">
+        <img id="gear0" src="assets/core/gear_small.svg" alt="gear" />
+        <img id="gear1" src="assets/core/gear_big.svg" alt="gear" />
+        <img id="gear2" src="assets/core/gear_small.svg" alt="gear" />
+      </div>
 
-             
-         </style>
-         
-     </head>
-     <body style="background:#000000; touch-action: none">
-            <div style="font-family:ui-font">.</div>
-         <div id="ui"></div>
+      <img id="pf-logo-gear" src="assets/core/pf_logo.png" />
+    </div>
 
-         <div id="preloader-gear">
-            <div id = gears>
-                <img id="gear0" src="assets/core/gear_small.svg" alt="gear">
-                <img id="gear1" src="assets/core/gear_big.svg" alt="gear">
-                <img id="gear2" src="assets/core/gear_small.svg" alt="gear">
-            </div>
+    <script>
+      (function () {
+        loaded = 100;
+        var gears = document.getElementById("gears");
+        if (!gears) return;
+        function scaleGears() {
+          var w = window.innerWidth;
+          var h = window.innerHeight;
+          var scale = Math.min((w * 0.5) / 520, (h * 0.3) / 364);
+          gears.style.transform = "scale(" + scale + ")";
+          gears.style.left = w * 0.53 - 520 * 0.5 * scale + "px";
+          gears.style.top = h * 0.5 - 364 * 0.5 * scale + "px";
+        }
 
-            <img id="pf-logo-gear" src="assets/core/pf_logo.png">
-        </div>
+        scaleGears();
+        window.addEventListener("resize", scaleGears);
+      })();
+    </script>
+    <!--preloader-end-->
 
-        <script>
-            (function(){
-                loaded = 100;
-                var gears = document.getElementById("gears");
-                if(!gears)return;
-                function scaleGears(){
-                    var w = window.innerWidth;
-                    var h = window.innerHeight;
-                    var scale = Math.min(w*0.5/520, h*0.3/364);
-                    gears.style.transform = "scale("+scale+")";
-                    gears.style.left = w*0.53 - 520*0.5*scale + "px";
-                    gears.style.top = h*0.5 - 364*0.5*scale + "px";
-                }
-
-                scaleGears();
-                window.addEventListener("resize", scaleGears);
-            })();
-            
-        </script>
-        <!--preloader-end-->
-        
-        <script src="build/vendor.main.js" charset="utf-8"></script>
-        <script src="build/main.js" charset="utf-8"></script>
-        
-
-         
-         <div style=' position:fixed; z-index: 5; color:white' id='asd'>ASD</div>
-        
-     </body>
- </html>
-
-
-
-
-
-
-
-
-
-
-
+    <script src="build/vendor.main.js" charset="utf-8"></script>
+    <script src="build/main.js" charset="utf-8"></script>
+  </body>
+</html>
