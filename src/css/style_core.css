@@ -1,0 +1,350 @@
+@keyframes pulse {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    100% {
+        transform: scale(0.9, 0.9);
+    }
+}
+
+@keyframes twist {
+    0% {
+        transform: skewX(-10deg);
+    }
+
+    100% {
+        transform: skewX(10deg);
+    }
+}
+
+@keyframes jump {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(-4deg);
+    }
+
+    100% {
+        transform: rotate(4deg);
+    }
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#loading {
+    position: fixed;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+}
+
+/*
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background: #0eb1f7;
+    background: linear-gradient(180deg, #0eb1f7 0%, #095f85 50%);
+
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+body,html{
+    touch-action: none
+}
+*/
+
+body,html{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    background: 0 0;
+
+    touch-action: none;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#ui {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+}
+
+
+.screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.center-absolute {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+}
+
+
+.not-select{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.hide {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s, visiblility 1s;
+}
+
+.show {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s, visiblility 1s;
+}
+
+.simple-pulse{
+    animation-name: pulse;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*PRELOADER */
+#preloader {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(23, 37, 56);
+    background: linear-gradient(45deg, rgba(23, 37, 56, 1) 0%, rgba(68, 149, 250, 1) 100%);
+
+    z-index: 999;
+    pointer-events: none;
+    touch-action: none;
+}
+
+#preloader img {
+    position: absolute;
+    height: 80%;
+    width: auto;
+    margin: auto;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#game-logo,
+#pf-logo {
+    margin: auto;
+    position: relative;
+    width: 100%;
+
+    height: 30%;
+}
+
+#game-logo img{
+    border: 6px solid #ffffff;
+    border-radius: 28%;
+}
+
+
+
+#pf-logo {
+    height: 15%;
+    position: absolute;
+    bottom: 0;
+}
+
+#progress-bar {
+    position: relative;
+    margin: 10px auto;
+    /*top:0;
+    left:0;
+    right:0;
+    bottom: 0;*/
+    width: 50%;
+    height: 5%;
+    max-height: 20px;
+}
+
+#progress-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*background: #990000;*/
+    border-radius: 20px;
+    border: 5px solid #FFBA00;
+}
+
+#bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10%;
+    height: 115%;
+    border-radius: 20px;
+    background: #ffffff;
+    margin: 4px;
+}
+
+
+#demo-loading {
+    position: relative;
+    height: 15%;
+    margin: 5px;
+}
+
+#demo-loading p {
+    margin: 0;
+}
+
+
+@media screen and (orientation:landscape) {
+    #pf-logo img {
+        left: 0;
+        right: auto;
+    }
+
+    #game-logo {
+        margin: auto;
+        position: relative;
+        width: 100%;
+        height: 40%;
+    }
+
+
+
+    #preloader img {
+        height: 90%;
+    }
+
+    #progress-bar {
+        width: 50%;
+    }
+
+    #progress-bar {
+        width: 40%;
+        max-height: 30px;
+    }
+
+    #demo-loading {
+        position: relative;
+        height: 20%;
+        margin: 5px;
+    }
+
+    #restart-card div {
+        height: 80%;
+        top: 5%;
+        bottom: unset;
+    }
+
+    #restart-card #or {
+        max-height: 7%;
+    }
+
+    #restart-card #download {
+        margin-top: 30px;
+    }
+}
+
+
+
+/* INSTALL BUTTON */
+
+
+
+.simple-btn.simple-install{
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+
+    border: 4px solid #ffffff;
+    border-radius: 20px;
+
+    margin: auto;
+    left: 0;
+    right: 0;
+
+}
+
+
+@media screen and (orientation:landscape) {
+    
+
+    .simple-btn.simple-install{
+        left: unset;
+
+    }
+
+
+    
+
+}
+

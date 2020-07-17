@@ -1,0 +1,23 @@
+.rail-btn{
+    position: absolute;
+}
+
+.rail-btn p{
+    position: absolute;
+    display: inline-block;
+    font-family: ui-font;
+    font-size: 32px;
+    white-space: nowrap;
+
+    transform-origin: top left;
+}
+
+.rail-btn-border{
+    content: "";
+    position: absolute;
+    /*top: 5%;
+    left: 3%;
+    width:94%;
+    height: 80%;*/
+    border:2px solid #ffffff;
+}

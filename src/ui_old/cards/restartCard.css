@@ -1,0 +1,46 @@
+
+.restart-card{
+    display: inline-block;
+    text-align: center;
+
+    position: absolute;
+    transform-origin: top left;
+}
+
+.restart-card img{
+    display: block;
+
+    margin: 20px auto;
+}
+
+.restart-card img:not(.restart-logo){
+    width: 200px;
+}
+
+.restart-logo{
+    border-radius: 30px;
+    border: 5px solid #ffffff;
+    background: #fff;
+    /*position: absolute;
+    left: 0;right: 0;top: 15%;margin: auto;*/
+
+    width: 150px;
+
+    margin-bottom: 60px!important;
+}
+
+.restart-btn{
+    display: block;
+
+    margin: 20px auto;
+}   
+
+
+.horizontal-restart{
+    width:560px;
+    height: 340px;
+}
+.horizontal-restart>div:not(.restart-logo){
+    display: inline-block;
+    margin: 20px 10px;
+}

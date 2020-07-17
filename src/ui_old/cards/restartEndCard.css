@@ -1,0 +1,43 @@
+
+/*  RESTART CARD */
+.restartend-card div {
+    width: 80%;
+    height: 70%;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+.restartend-card img {
+    max-width: 100%;
+    max-height: 20%;
+    display: block;
+    margin: 20px auto;
+}
+
+
+
+.retry {
+    margin-top: 50px !important;
+    max-height: 15%!important;
+}
+
+.download {
+    margin-top: 30px !important;
+    max-height: 20%!important;
+}
+
+.bounce {
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.or-text {
+    max-height: 5% !important;
+}

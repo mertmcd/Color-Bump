@@ -1,0 +1,70 @@
+
+/*SIMPLE END CARD */
+.simple-card>div {
+    
+    height: 50%;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.simple-card p{
+    color: #ffffff;
+    -webkit-text-stroke: 1px #000000;
+}
+
+.card-logo{
+    /*max-width: 40%;*/
+    margin: 0 auto 20px;
+    max-height: 40%;
+    display: block;
+
+    border: 4px solid #ffffff;
+    border-radius: 25%;
+}
+
+
+.simple-card-btn-holder{
+    animation-name: pulse;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.simple-card-btn {
+    position: relative;
+    display: inline-block;
+    transform-origin: left center;
+}
+
+
+
+
+.simple-card-btn p{
+    position: absolute;
+    font-size:40px;
+    display: inline-block;
+
+    font-family: ui-font;
+    transform-origin: left top;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+
+@media screen and (orientation:landscape) {
+    
+    
+    .simple-card>div {
+    
+        height: 70%;
+
+    }
+
+}
