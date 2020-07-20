@@ -70,22 +70,41 @@ class Game {
 
     // Add red path
 
-    let pathGeo = new THREE.BoxGeometry(10, 2, 150);
-    let pathMat = new THREE.MeshBasicMaterial({
+    let pathGeo = new THREE.BoxGeometry(10, 2, 250);
+    let pathMat = new THREE.MeshPhongMaterial({
       color: red,
     });
     this.path = new THREE.Mesh(pathGeo, pathMat);
 
     this.path.position.set(0, 0, 0);
     main.scene.add(this.path);
+
     this.path.body = new Body({
       position: this.path.position,
       mass: 0,
     });
-    let pathShape = new Box(new Vec3(5, 1, 75)); //cannonjs
+    let pathShape = new Box(new Vec3(5, 1, 125)); //cannonjs
     this.path.body.addShape(pathShape);
     main.world.add(this.path.body);
-    //console.log(this.path);
+
+    // Add dashed-line
+
+    let points = [];
+    points.push(new THREE.Vector3(-4, 4, 5));
+    // points.push(new THREE.Vector3(-5, 4, 0));
+    points.push(new THREE.Vector3(4, 4, 5));
+
+    let lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+    let lineMat = new THREE.LineDashedMaterial({
+      color: 0xffffff,
+      linewidth: 3,
+      scale: 1,
+      dashSize: 2,
+      gapSize: 1,
+    });
+
+    let line = new THREE.Line(lineGeo, lineMat);
+    main.scene.add(line);
 
     // Gets path position x,y,z
 
@@ -95,24 +114,44 @@ class Game {
 
     // Add cyan platform
 
-    let plat = new Vec3(pathSize.x * 0.8, 1, 1.5);
-    let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
-    let platMat = new THREE.MeshPhongMaterial({
-      color: cyan,
-    });
+    // let plat = new Vec3(1, 1, 1);
+    // let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
+    // let platMat = new THREE.MeshPhongMaterial({
+    //   color: cyan,
+    // });
 
-    this.platform = new THREE.Mesh(platGeo, platMat);
-    this.platform.position.set(0, 2, 5);
-    main.scene.add(this.platform);
+    // this.platform = new THREE.Mesh(platGeo, platMat);
 
-    this.platform.body = new Body({
-      position: this.platform.position,
-      mass: 1,
-    });
+    let d = 0;
+    this.platList = [];
 
-    let platformShape = new Box(plat.mult(0.5));
-    this.platform.body.addShape(platformShape);
-    main.world.add(this.platform.body);
+    for (let i = 0; i < 2; i++) {
+      let platx = 0;
+      let platy = 2;
+      let platz = 12 + d;
+
+      let plat = new Vec3(pathSize.x * 0.9, 1.5, 1.2);
+      let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
+      let platMat = new THREE.MeshPhongMaterial({
+        color: cyan,
+      });
+
+      this.platform = new THREE.Mesh(platGeo, platMat);
+      this.platform.position.set(platx, platy, platz);
+      main.scene.add(this.platform);
+
+      this.platform.body = new Body({
+        position: this.platform.position,
+        mass: 1,
+      });
+
+      let platformShape = new Box(plat.mult(0.5));
+      this.platform.body.addShape(platformShape);
+      main.world.add(this.platform.body);
+      this.platList.push(this.platform);
+      d = 50;
+    }
+    console.log(this.platList);
 
     // Add cyan ball
 
@@ -127,7 +166,7 @@ class Game {
 
     this.ball.body = new Body({
       position: this.ball.position,
-      mass: 30,
+      mass: 100,
     });
     let ballShape = new Sphere(0.7);
     this.ball.body.addShape(ballShape);
@@ -152,32 +191,35 @@ class Game {
     let boxSize = box3.getSize(boxVec);
 
     // Placing boxes on the platform
+    let t = 0;
+    for (let k = 0; k < 2; k++) {
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < columns; j++) {
+          let x = 3.7 - j * (boxSize.x * 2.5);
+          let z = t + 15 + i * (boxSize.z * 2.5);
+          let y = 2;
 
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < columns; j++) {
-        let x = 3.7 - j * (boxSize.x * 2.5);
-        let z = 10 + i * (boxSize.z * 2.5);
-        let y = 2;
+          boxGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+          boxMat = new THREE.MeshPhongMaterial({
+            color: gray,
+          });
 
-        boxGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
-        boxMat = new THREE.MeshPhongMaterial({
-          color: gray,
-        });
+          this.box = new THREE.Mesh(boxGeo, boxMat);
+          this.box.position.set(x, y, z);
+          main.scene.add(this.box);
 
-        this.box = new THREE.Mesh(boxGeo, boxMat);
-        this.box.position.set(x, y, z);
-        main.scene.add(this.box);
+          this.box.body = new Body({
+            position: this.box.position,
+            mass: 1,
+          });
+          let boxShape = new Box(new Vec3(0.6, 0.6, 0.6));
+          this.box.body.addShape(boxShape);
+          main.world.add(this.box.body);
 
-        this.box.body = new Body({
-          position: this.box.position,
-          mass: 1,
-        });
-        let boxShape = new Box(new Vec3(0.6, 0.6, 0.6));
-        this.box.body.addShape(boxShape);
-        main.world.add(this.box.body);
-
-        this.boxList.push(this.box);
+          this.boxList.push(this.box);
+        }
       }
+      t = 50;
     }
     console.log(this.boxList);
 
@@ -238,11 +280,15 @@ class Game {
     if (delta > 0.03) delta = 0.03;
     var ratio = delta * 60;
 
+    // joins bodies and meshes to each other
+
     this.ball.position.copy(this.ball.body.position);
     this.ball.quaternion.copy(this.ball.body.quaternion);
 
-    this.platform.position.copy(this.platform.body.position);
-    this.platform.quaternion.copy(this.platform.body.quaternion);
+    for (let plts of this.platList) {
+      plts.position.copy(plts.body.position);
+      plts.quaternion.copy(plts.body.quaternion);
+    }
 
     this.path.position.copy(this.path.body.position);
     this.path.quaternion.copy(this.path.body.quaternion);
@@ -254,19 +300,22 @@ class Game {
 
     let controls = app.controls;
 
+    this.cam.position.z = this.ball.body.position.z - 10;
+
     if (controls.isDown) {
       console.log("mert");
       console.log(this.ball.position);
       let dx = controls.prevX - controls.mouseX;
-      let dz = 1;
 
-      dx *= 0.2;
-      dz *= 0.5;
+      dx *= 0.1;
 
       this.ball.body.velocity.x += dx;
-      // this.ball.body.velocity.z += dz;
-      this.cam.position.z += dz / 4;
+      this.ball.body.velocity.z = 5;
     }
+
+    if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
+
+    if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
 
     confettiMaker && confettiMaker.update();
 
