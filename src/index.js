@@ -63,7 +63,7 @@ var data = {
   gameButtonTextColor: "#ffffff", //
   gameButtonAnimName: "pulse", //
 
-  bgColor: "#4B75FF", //4B75FF
+  bgColor: "#FDE636", //4B75FF
 
   hasGradient: false,
   topGradient: "#4B75FF",

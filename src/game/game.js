@@ -62,7 +62,7 @@ class Game {
 
     // / / /     C O D E   B E L O W     \ \ \ \\
 
-    let red = 0xff0000;
+    let red = 0xc81a21;
     let cyan = 0x68f0f0;
     let gray = 0x393537;
     let rows = 12;
@@ -70,8 +70,8 @@ class Game {
 
     // Add red path
 
-    let pathGeo = new THREE.BoxGeometry(10, 2, 250);
-    let pathMat = new THREE.MeshPhongMaterial({
+    let pathGeo = new THREE.BoxGeometry(10, 0, 250);
+    let pathMat = new THREE.MeshBasicMaterial({
       color: red,
     });
     this.path = new THREE.Mesh(pathGeo, pathMat);
@@ -86,6 +86,45 @@ class Game {
     let pathShape = new Box(new Vec3(5, 1, 125)); //cannonjs
     this.path.body.addShape(pathShape);
     main.world.add(this.path.body);
+
+    // Add finish plane
+    let texture = main.storage.getItem("texture", "finish");
+    texture.repeat.set(16, 2);
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    let plnGeo = new THREE.PlaneGeometry(10, 0.5);
+    let plnMat = new THREE.MeshBasicMaterial({
+      side: THREE.DoubleSide,
+      map: texture,
+    });
+
+    this.plnMesh = new THREE.Mesh(plnGeo, plnMat);
+    this.plnMesh.position.set(0, 1, 120);
+    this.plnMesh.rotation.x = Math.PI / 2;
+    main.scene.add(this.plnMesh);
+
+    // Add borders
+    this.borderList = [];
+    let k = 0;
+    for (let i = 0; i < 2; i++) {
+      let bordGeo = new THREE.BoxGeometry(0.35, 0.5, 250);
+      let bordMat = new THREE.MeshPhongMaterial({
+        color: red,
+      });
+      this.border = new THREE.Mesh(bordGeo, bordMat);
+
+      this.border.position.set(4.875 + k, 0.5, 0);
+      main.scene.add(this.border);
+
+      this.border.body = new Body({
+        position: this.border.position,
+        mass: 0,
+      });
+      let borderShape = new Box(new Vec3(0.175, 0.25, 125)); //cannonjs
+      this.border.body.addShape(borderShape);
+      main.world.add(this.border.body);
+      this.borderList.push(this.border);
+      k = -9.75;
+    }
 
     // Add dashed-line
 
@@ -114,14 +153,6 @@ class Game {
 
     // Add cyan platform
 
-    // let plat = new Vec3(1, 1, 1);
-    // let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
-    // let platMat = new THREE.MeshPhongMaterial({
-    //   color: cyan,
-    // });
-
-    // this.platform = new THREE.Mesh(platGeo, platMat);
-
     let d = 0;
     this.platList = [];
 
@@ -130,7 +161,7 @@ class Game {
       let platy = 2;
       let platz = 12 + d;
 
-      let plat = new Vec3(pathSize.x * 0.9, 1.5, 1.2);
+      let plat = new Vec3(pathSize.x * 0.9, 1.2, 1.2);
       let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
       let platMat = new THREE.MeshPhongMaterial({
         color: cyan,
@@ -142,7 +173,7 @@ class Game {
 
       this.platform.body = new Body({
         position: this.platform.position,
-        mass: 1,
+        mass: 10,
       });
 
       let platformShape = new Box(plat.mult(0.5));
@@ -151,7 +182,7 @@ class Game {
       this.platList.push(this.platform);
       d = 50;
     }
-    console.log(this.platList);
+    //console.log(this.platList);
 
     // Add cyan ball
 
@@ -166,7 +197,7 @@ class Game {
 
     this.ball.body = new Body({
       position: this.ball.position,
-      mass: 100,
+      mass: 1000,
     });
     let ballShape = new Sphere(0.7);
     this.ball.body.addShape(ballShape);
@@ -221,14 +252,12 @@ class Game {
       }
       t = 50;
     }
-    console.log(this.boxList);
+
+    //console.log(this.boxList);
 
     if (fromRestart) {
       return;
     }
-
-    // window.main = main;
-    // window.THREE = THREE;
 
     // Call these functions once
 
@@ -280,7 +309,7 @@ class Game {
     if (delta > 0.03) delta = 0.03;
     var ratio = delta * 60;
 
-    // joins bodies and meshes to each other
+    // join bodies and meshes to each other
 
     this.ball.position.copy(this.ball.body.position);
     this.ball.quaternion.copy(this.ball.body.quaternion);
@@ -298,23 +327,28 @@ class Game {
       boxes.quaternion.copy(boxes.body.quaternion);
     }
 
+    for (let brds of this.borderList) {
+      brds.position.copy(brds.body.position);
+      brds.quaternion.copy(brds.body.quaternion);
+    }
+
     let controls = app.controls;
 
     this.cam.position.z = this.ball.body.position.z - 10;
 
     if (controls.isDown) {
+      document.getElementById("hand").style.display = false;
       console.log("mert");
       console.log(this.ball.position);
       let dx = controls.prevX - controls.mouseX;
 
-      dx *= 0.1;
+      dx *= 0.8;
 
-      this.ball.body.velocity.x += dx;
+      this.ball.body.velocity.x = dx;
       this.ball.body.velocity.z = 5;
     }
 
     if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
-
     if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
 
     confettiMaker && confettiMaker.update();
