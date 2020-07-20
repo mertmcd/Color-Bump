@@ -337,7 +337,7 @@ class Game {
     this.cam.position.z = this.ball.body.position.z - 10;
 
     if (controls.isDown) {
-      document.getElementById("hand").style.display = false;
+      // document.getElementById("hand").style.display = false;
       console.log("mert");
       console.log(this.ball.position);
       let dx = controls.prevX - controls.mouseX;

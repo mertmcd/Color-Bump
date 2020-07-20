@@ -1,15 +1,18 @@
 // TO DO'S:
 
-// hand tutorial: css
 // play now button: css
-// ball trail: css
-// yellow background: html? css?
+
+// ball trail: threejs
+
 // lights???
+
 // endgame: try again continue
-// finish line: asset?
-// box and ball crash incident: collision collider?
+
+// box and ball crash incident: collision collider? body.addEventListener(body.addEventListener('collide', ...);)
 
 // DONES:
 
+// finish line: texture
+// hand tutorial: css
 // borders
 // ball control
