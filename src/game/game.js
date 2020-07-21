@@ -14,6 +14,9 @@ var data, confettiMaker;
 var updateFunction;
 let geometry;
 let trail;
+let isClicked = false;
+let isEnd = false;
+let isWon = false;
 
 class Game {
   constructor(_main) {}
@@ -65,7 +68,7 @@ class Game {
 
     // / / /     C O D E   B E L O W     \ \ \ \\
 
-    let red = 0xc81a21;
+    let red = 0xff0000;
     let cyan = 0x68f0f0;
     let gray = 0x393537;
     let rows = 12;
@@ -91,6 +94,7 @@ class Game {
     main.world.add(this.path.body);
 
     // Add finish plane
+
     let texture = main.storage.getItem("texture", "finish");
     texture.repeat.set(16, 2);
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -106,11 +110,12 @@ class Game {
     main.scene.add(this.plnMesh);
 
     // Add borders
+
     this.borderList = [];
     let k = 0;
     for (let i = 0; i < 2; i++) {
       let bordGeo = new THREE.BoxGeometry(0.35, 0.5, 250);
-      let bordMat = new THREE.MeshPhongMaterial({
+      let bordMat = new THREE.MeshLambertMaterial({
         color: red,
       });
       this.border = new THREE.Mesh(bordGeo, bordMat);
@@ -131,6 +136,33 @@ class Game {
 
     // Add dashed-line
 
+    let startGeo = new THREE.BoxGeometry(1, 1, 1);
+    let startMat = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+    });
+    this.dashedLine = new THREE.Mesh(startGeo, startMat);
+
+    this.dashedList = [];
+
+    // Placing dashed line on the platform
+
+    for (let i = 0; i < 15; i++) {
+      let x = 4.9 - i * 0.7;
+      let z = 10;
+      let y = 0.8;
+
+      let startGeo = new THREE.BoxGeometry(0.3, 0.02, 0.05);
+      let startMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+      });
+      this.dashedLine = new THREE.Mesh(startGeo, startMat);
+
+      this.dashedLine.position.set(x, y, z);
+      main.scene.add(this.dashedLine);
+
+      this.dashedList.push(this.dashedLine);
+    }
+
     // Gets path position x,y,z
 
     let pathVec = new Vector3(); // threejs
@@ -145,7 +177,7 @@ class Game {
     for (let i = 0; i < 2; i++) {
       let platx = 0;
       let platy = 2;
-      let platz = 12 + d;
+      let platz = 20 + d;
 
       let plat = new Vec3(pathSize.x * 0.9, 1.2, 1.2);
       let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
@@ -159,10 +191,10 @@ class Game {
 
       this.platform.body = new Body({
         position: this.platform.position,
-        mass: 10,
+        mass: 1,
       });
 
-      let platformShape = new Box(plat.mult(0.5));
+      let platformShape = new Box(plat.mult(0.6));
       this.platform.body.addShape(platformShape);
       main.world.add(this.platform.body);
       this.platList.push(this.platform);
@@ -183,17 +215,27 @@ class Game {
 
     this.ball.body = new Body({
       position: this.ball.position,
-      mass: 1000,
+      mass: 500,
     });
     let ballShape = new Sphere(0.7);
     this.ball.body.addShape(ballShape);
     main.world.add(this.ball.body);
 
+    this.ball.body.addEventListener("collide", function (e) {
+      if (e.body.tag === "enemy") {
+        if (!isEnd) {
+          isEnd = true;
+          Ui.endTutorial();
+          Ui.hideButtonTutorial();
+        }
+      }
+    });
+
     // Add trail
 
-    geometry = [new THREE.Vector3(-0.2, 0, -0.2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.2, 0, 0.2)];
-    console.log(geometry);
-    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 15);
+    geometry = [new THREE.Vector3(-0.2, -0.2, -0.2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.2, 0.2, 0.2)];
+    // console.log(geometry);
+    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 30);
 
     // Add gray boxes
 
@@ -217,7 +259,7 @@ class Game {
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < columns; j++) {
           let x = 3.7 - j * (boxSize.x * 2.5);
-          let z = t + 15 + i * (boxSize.z * 2.5);
+          let z = t + 23 + i * (boxSize.z * 2.5);
           let y = 2;
 
           boxGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
@@ -235,6 +277,7 @@ class Game {
           });
           let boxShape = new Box(new Vec3(0.6, 0.6, 0.6));
           this.box.body.addShape(boxShape);
+          this.box.body.tag = "enemy";
           main.world.add(this.box.body);
 
           this.boxList.push(this.box);
@@ -242,6 +285,7 @@ class Game {
       }
       t = 50;
     }
+    //  if (this.ball.body.position.z >= 120) isEnd = true;
 
     //console.log(this.boxList);
 
@@ -327,16 +371,23 @@ class Game {
 
     this.cam.position.z = this.ball.body.position.z - 10;
 
-    if (controls.isDown) {
-      // document.getElementById("hand").style.display = false;
-      console.log("mert");
-      console.log(this.ball.position);
-      let dx = controls.prevX - controls.mouseX;
-
-      dx *= 0.5;
-
-      this.ball.body.velocity.x = dx;
+    if (isClicked) {
+      Ui.hideHandTutorial();
+      Ui.showButtonTutorial();
+      // isClicked = true;
       this.ball.body.velocity.z = 5;
+    }
+
+    if (controls.isDown) {
+      isClicked = true;
+      let dx = 0.5 * (controls.prevX - controls.mouseX);
+      this.ball.body.velocity.x = dx;
+    }
+
+    if (isEnd && !isWon) {
+      this.ball.body.velocity.z = 0;
+      this.ball.body.velocity.y = 0;
+      this.ball.body.velocity.x = 0;
     }
 
     if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
@@ -370,7 +421,7 @@ class Game {
     let ambientLight = new THREE.AmbientLight(lightColor, 0.2); //0.7
     main.scene.add(ambientLight);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    var dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
     dirLight.position.set(-300, 1000, 0);
     main.scene.add(dirLight);
   }

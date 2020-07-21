@@ -5,6 +5,8 @@ import TexturedButton from "../ui/buttons/textured";
 
 import handImage from "../../assets/ui/handgif.gif";
 import playNow from "../../assets/ui/playnow.png";
+import continueImg from "../../assets/ui/continue.png";
+import tryAgain from "../../assets/ui/tryagain.png";
 
 var main;
 
@@ -16,7 +18,7 @@ class Ui {
     this.uiHelper = uiHelper;
   }
 
-  initTutorial() {
+  static initTutorial() {
     let image1 = document.createElement("img");
     image1.id = "hand";
 
@@ -30,12 +32,47 @@ class Ui {
     document.getElementById("ui").append(image2);
   }
 
+  static endTutorial() {
+    let image3 = document.createElement("img");
+    image3.id = "continue";
+
+    image3.src = continueImg;
+    document.getElementById("ui").append(image3);
+
+    let image4 = document.createElement("img");
+    image4.id = "tryagain";
+
+    image4.src = tryAgain;
+    document.getElementById("ui").append(image4);
+  }
+
+  static hideHandTutorial() {
+    let hand = document.getElementById("hand");
+    hand.style.display = "none";
+  }
+
+  static hideButtonTutorial() {
+    let playNow = document.getElementById("playnow");
+    playNow.style.display = "none";
+  }
+
+  static showHandTutorial() {
+    let hand = document.getElementById("hand");
+    hand.style.display = "block";
+  }
+
+  static showButtonTutorial() {
+    let playNow = document.getElementById("playnow");
+    playNow.style.display = "block";
+  }
+
   prepare() {
     ////BANNER
     let banner = new Banner("SOME TEXT HERE", "#ffffff", "#333333");
     this.uiHelper.add(banner, true);
 
-    this.initTutorial();
+    Ui.initTutorial();
+    Ui.hideButtonTutorial();
 
     ///BOTTOM BANNER
     let bb = new BottomBanner(require("../../assets/ui/bottomBanner0.png"));
