@@ -64,3 +64,15 @@
   transform: translate(-50%, 0);
   left: 50%;
 }
+
+#playnow {
+  position: absolute;
+  bottom: 10%;
+  transform: translate(-50%, 0);
+  left: 50%;
+  width: 200px;
+  animation-name: example;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}

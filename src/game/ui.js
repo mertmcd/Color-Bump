@@ -4,6 +4,7 @@ import BottomBanner from "../ui/core/bottomBanner";
 import TexturedButton from "../ui/buttons/textured";
 
 import handImage from "../../assets/ui/handgif.gif";
+import playNow from "../../assets/ui/playnow.png";
 
 var main;
 
@@ -21,6 +22,12 @@ class Ui {
 
     image1.src = handImage;
     document.getElementById("ui").append(image1);
+
+    let image2 = document.createElement("img");
+    image2.id = "playnow";
+
+    image2.src = playNow;
+    document.getElementById("ui").append(image2);
   }
 
   prepare() {

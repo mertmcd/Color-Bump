@@ -3,14 +3,17 @@ import Confetti from "../utils/confetti";
 import Ui from "./ui";
 import Level from "./level";
 import {Body, Sphere, Plane, Box, Vec3} from "cannon";
-import {Vector3, Box3} from "three";
+import {Vector3, Box3, Triangle} from "three";
 import {BrotliDecompressedSize} from "../brotli/unbrotli";
+import Helper from "./helper";
 
 var gameEnded = false;
 var main, clock, controls, ui;
 var isTest = true;
 var data, confettiMaker;
 var updateFunction;
+let geometry;
+let trail;
 
 class Game {
   constructor(_main) {}
@@ -128,23 +131,6 @@ class Game {
 
     // Add dashed-line
 
-    let points = [];
-    points.push(new THREE.Vector3(-4, 4, 5));
-    // points.push(new THREE.Vector3(-5, 4, 0));
-    points.push(new THREE.Vector3(4, 4, 5));
-
-    let lineGeo = new THREE.BufferGeometry().setFromPoints(points);
-    let lineMat = new THREE.LineDashedMaterial({
-      color: 0xffffff,
-      linewidth: 3,
-      scale: 1,
-      dashSize: 2,
-      gapSize: 1,
-    });
-
-    let line = new THREE.Line(lineGeo, lineMat);
-    main.scene.add(line);
-
     // Gets path position x,y,z
 
     let pathVec = new Vector3(); // threejs
@@ -203,7 +189,11 @@ class Game {
     this.ball.body.addShape(ballShape);
     main.world.add(this.ball.body);
 
-    //console.log(this.ball);
+    // Add trail
+
+    geometry = [new THREE.Vector3(-0.2, 0, -0.2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.2, 0, 0.2)];
+    console.log(geometry);
+    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 15);
 
     // Add gray boxes
 
@@ -313,6 +303,7 @@ class Game {
 
     this.ball.position.copy(this.ball.body.position);
     this.ball.quaternion.copy(this.ball.body.quaternion);
+    trail.advance();
 
     for (let plts of this.platList) {
       plts.position.copy(plts.body.position);
@@ -342,7 +333,7 @@ class Game {
       console.log(this.ball.position);
       let dx = controls.prevX - controls.mouseX;
 
-      dx *= 0.8;
+      dx *= 0.5;
 
       this.ball.body.velocity.x = dx;
       this.ball.body.velocity.z = 5;
