@@ -60,7 +60,7 @@ class Game {
     this.cam.position.set(0, 20, -15);
     this.cam.lookAt(0, 0, 0);
 
-    main.initCannonDebug();
+    // main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -215,7 +215,7 @@ class Game {
 
     this.ball.body = new Body({
       position: this.ball.position,
-      mass: 500,
+      mass: 100,
     });
     let ballShape = new Sphere(0.7);
     this.ball.body.addShape(ballShape);
@@ -285,8 +285,10 @@ class Game {
       }
       t = 50;
     }
-    //  if (this.ball.body.position.z >= 120) isEnd = true;
-
+    // if (this.ball.body.position.z >= 120) {
+    //   isEnd = true;
+    //   isWon = true;
+    // }
     //console.log(this.boxList);
 
     if (fromRestart) {
@@ -388,6 +390,7 @@ class Game {
       this.ball.body.velocity.z = 0;
       this.ball.body.velocity.y = 0;
       this.ball.body.velocity.x = 0;
+      Ui.hideButtonTutorial();
     }
 
     if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
