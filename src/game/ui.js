@@ -7,6 +7,7 @@ import handImage from "../../assets/ui/handgif.gif";
 import playNow from "../../assets/ui/playnow.png";
 import continueImg from "../../assets/ui/continue.png";
 import tryAgain from "../../assets/ui/tryagain.png";
+import goodJob from "../../assets/ui/goodjob.png";
 
 var main;
 
@@ -44,6 +45,14 @@ class Ui {
 
     image4.src = tryAgain;
     document.getElementById("ui").append(image4);
+  }
+
+  static goodJob() {
+    let image5 = document.createElement("img");
+    image5.id = "goodjob";
+
+    image5.src = goodJob;
+    document.getElementById("ui").append(image5);
   }
 
   static hideHandTutorial() {

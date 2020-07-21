@@ -2,7 +2,7 @@ import assetManager from "./assetManager";
 import Confetti from "../utils/confetti";
 import Ui from "./ui";
 import Level from "./level";
-import {Body, Sphere, Plane, Box, Vec3} from "cannon";
+import {Body, Sphere, Box, Vec3} from "cannon";
 import {Vector3, Box3, Triangle} from "three";
 import {BrotliDecompressedSize} from "../brotli/unbrotli";
 import Helper from "./helper";
@@ -16,7 +16,6 @@ let geometry;
 let trail;
 let isClicked = false;
 let isEnd = false;
-let isWon = false;
 
 class Game {
   constructor(_main) {}
@@ -60,7 +59,7 @@ class Game {
     this.cam.position.set(0, 20, -15);
     this.cam.lookAt(0, 0, 0);
 
-    // main.initCannonDebug();
+    main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -191,7 +190,7 @@ class Game {
 
       this.platform.body = new Body({
         position: this.platform.position,
-        mass: 1,
+        mass: 5,
       });
 
       let platformShape = new Box(plat.mult(0.6));
@@ -217,7 +216,7 @@ class Game {
       position: this.ball.position,
       mass: 100,
     });
-    let ballShape = new Sphere(0.7);
+    let ballShape = new Sphere(0.9);
     this.ball.body.addShape(ballShape);
     main.world.add(this.ball.body);
 
@@ -230,6 +229,30 @@ class Game {
         }
       }
     });
+
+    //let physicsMaterial = new CANNON.Material("material");
+    // let physicsContactMaterial = main.CANNON.ContactMaterial(this.ball, this.platform, 0.3, 0.0);
+    // main.scene.addContactMaterial(physicsContactMaterial);
+
+    // function ContactMaterial(m1, m2, options) {
+
+    //   options = Utils.defaults(options, {
+    //     friction: 0.3,
+    //     restitution: 0.3,
+    //     contactEquationStiffness: 1e7,
+    //     contactEquationRelaxation: 3,
+    //     frictionEquationStiffness: 1e7,
+    //     frictionEquationRelaxation: 3,
+    //   });
+
+    //   this.materials = [m1, m2];
+    //   this.friction = options.friction;
+    //   this.restitution = options.restitution;
+    //   this.contactEquationStiffness = options.contactEquationStiffness;
+    //   this.contactEquationRelaxation = options.contactEquationRelaxation;
+    //   this.frictionEquationStiffness = options.frictionEquationStiffness;
+    //   this.frictionEquationRelaxation = options.frictionEquationRelaxation;
+    // }
 
     // Add trail
 
@@ -275,7 +298,7 @@ class Game {
             position: this.box.position,
             mass: 1,
           });
-          let boxShape = new Box(new Vec3(0.6, 0.6, 0.6));
+          let boxShape = new Box(new Vec3(0.67, 0.65, 0.65));
           this.box.body.addShape(boxShape);
           this.box.body.tag = "enemy";
           main.world.add(this.box.body);
@@ -285,10 +308,7 @@ class Game {
       }
       t = 50;
     }
-    // if (this.ball.body.position.z >= 120) {
-    //   isEnd = true;
-    //   isWon = true;
-    // }
+
     //console.log(this.boxList);
 
     if (fromRestart) {
@@ -345,6 +365,13 @@ class Game {
     if (delta > 0.03) delta = 0.03;
     var ratio = delta * 60;
 
+    if (this.ball.body.position.z >= 120) {
+      if (!isEnd) {
+        isEnd = true;
+        Ui.goodJob();
+      }
+    }
+
     // join bodies and meshes to each other
 
     this.ball.position.copy(this.ball.body.position);
@@ -386,7 +413,9 @@ class Game {
       this.ball.body.velocity.x = dx;
     }
 
-    if (isEnd && !isWon) {
+    console.log(this.ball.body.position.z);
+
+    if (isEnd) {
       this.ball.body.velocity.z = 0;
       this.ball.body.velocity.y = 0;
       this.ball.body.velocity.x = 0;

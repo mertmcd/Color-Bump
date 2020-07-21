@@ -101,3 +101,11 @@
   left: 50%;
   width: 400px;
 }
+
+#goodjob {
+  position: absolute;
+  top: 70%;
+  transform: translate(-50%, 0);
+  left: 50%;
+  width: 400px;
+}
