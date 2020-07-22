@@ -77,15 +77,14 @@ class Ui {
 
   prepare() {
     ////BANNER
-    let banner = new Banner("SOME TEXT HERE", "#ffffff", "#333333");
-    this.uiHelper.add(banner, true);
+    // s
 
     Ui.initTutorial();
     Ui.hideButtonTutorial();
 
     ///BOTTOM BANNER
-    let bb = new BottomBanner(require("../../assets/ui/bottomBanner0.png"));
-    this.uiHelper.add(bb, true, main.gotoLink);
+    // let bb = new BottomBanner(require("../../assets/ui/bottomBanner0.png"));
+    // this.uiHelper.add(bb, true, main.gotoLink);
 
     /*
         ////BUTTON
@@ -107,8 +106,6 @@ class Ui {
 
   resize(w, h) {
     this.uiHelper.resize(w, h);
-    if (w > h) document.getElementById("hand").style.width = "30%";
-    else document.getElementById("hand").style.width = "75%";
   }
 
   addEndCard() {}

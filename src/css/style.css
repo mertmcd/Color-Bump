@@ -17,6 +17,96 @@
   }
 }
 
+@media (orientation: landscape) {
+  #hand {
+    position: absolute;
+    top: 10%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 30%;
+  }
+
+  #playnow {
+    position: absolute;
+    bottom: 1%;
+    transform: translate(-50%, 0);
+    left: 84%;
+    width: 200px;
+  }
+  #continue {
+    position: absolute;
+    bottom: 30%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 250px;
+    animation-name: slide;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  #tryagain {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 200px;
+  }
+
+  #goodjob {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 250px;
+  }
+}
+@media (orientation: portrait) {
+  #hand {
+    position: absolute;
+    top: 10%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 80%;
+  }
+
+  #playnow {
+    position: absolute;
+    bottom: 1%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 200px;
+  }
+
+  #continue {
+    position: absolute;
+    bottom: 47%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 250px;
+    animation-name: slide;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  #tryagain {
+    position: absolute;
+    bottom: 60%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 180px;
+  }
+
+  #goodjob {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, 0);
+    left: 50%;
+    width: 250px;
+  }
+}
+
 .rail-hand {
   position: absolute;
   width: 120px;
@@ -65,47 +155,4 @@
 .rail-hand,
 .text-box {
   /*transition:  left 0.5s, top 0.5s;*/
-}
-
-#hand {
-  position: absolute;
-  top: 10%;
-  transform: translate(-50%, 0);
-  left: 50%;
-}
-
-#playnow {
-  position: absolute;
-  bottom: 10%;
-  transform: translate(-50%, 0);
-  left: 50%;
-  width: 200px;
-}
-
-#continue {
-  position: absolute;
-  bottom: 50%;
-  transform: translate(-50%, 0);
-  left: 50%;
-  width: 400px;
-  animation-name: slide;
-  animation-duration: 0.5s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-#tryagain {
-  position: absolute;
-  top: 30%;
-  transform: translate(-50%, 0);
-  left: 50%;
-  width: 400px;
-}
-
-#goodjob {
-  position: absolute;
-  top: 70%;
-  transform: translate(-50%, 0);
-  left: 50%;
-  width: 400px;
 }

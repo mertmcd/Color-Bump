@@ -59,7 +59,7 @@ class Game {
     this.cam.position.set(0, 20, -15);
     this.cam.lookAt(0, 0, 0);
 
-    main.initCannonDebug();
+    // main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -67,7 +67,7 @@ class Game {
 
     // / / /     C O D E   B E L O W     \ \ \ \\
 
-    let red = 0xff0000;
+    let red = 0xa70000;
     let cyan = 0x68f0f0;
     let gray = 0x393537;
     let rows = 12;
@@ -92,7 +92,7 @@ class Game {
     this.path.body.addShape(pathShape);
     main.world.add(this.path.body);
 
-    // Add finish plane
+    // Add finish texture
 
     let texture = main.storage.getItem("texture", "finish");
     texture.repeat.set(16, 2);
@@ -135,15 +135,7 @@ class Game {
 
     // Add dashed-line
 
-    let startGeo = new THREE.BoxGeometry(1, 1, 1);
-    let startMat = new THREE.MeshPhongMaterial({
-      color: 0xffffff,
-    });
-    this.dashedLine = new THREE.Mesh(startGeo, startMat);
-
     this.dashedList = [];
-
-    // Placing dashed line on the platform
 
     for (let i = 0; i < 15; i++) {
       let x = 4.9 - i * 0.7;
@@ -170,13 +162,13 @@ class Game {
 
     // Add cyan platform
 
-    let d = 0;
+    let dist = 0;
     this.platList = [];
 
     for (let i = 0; i < 2; i++) {
       let platx = 0;
       let platy = 2;
-      let platz = 20 + d;
+      let platz = 20 + dist;
 
       let plat = new Vec3(pathSize.x * 0.9, 1.2, 1.2);
       let platGeo = new THREE.BoxGeometry(plat.x, plat.y, plat.z);
@@ -197,9 +189,8 @@ class Game {
       this.platform.body.addShape(platformShape);
       main.world.add(this.platform.body);
       this.platList.push(this.platform);
-      d = 50;
+      dist = 50;
     }
-    //console.log(this.platList);
 
     // Add cyan ball
 
@@ -230,35 +221,11 @@ class Game {
       }
     });
 
-    //let physicsMaterial = new CANNON.Material("material");
-    // let physicsContactMaterial = main.CANNON.ContactMaterial(this.ball, this.platform, 0.3, 0.0);
-    // main.scene.addContactMaterial(physicsContactMaterial);
-
-    // function ContactMaterial(m1, m2, options) {
-
-    //   options = Utils.defaults(options, {
-    //     friction: 0.3,
-    //     restitution: 0.3,
-    //     contactEquationStiffness: 1e7,
-    //     contactEquationRelaxation: 3,
-    //     frictionEquationStiffness: 1e7,
-    //     frictionEquationRelaxation: 3,
-    //   });
-
-    //   this.materials = [m1, m2];
-    //   this.friction = options.friction;
-    //   this.restitution = options.restitution;
-    //   this.contactEquationStiffness = options.contactEquationStiffness;
-    //   this.contactEquationRelaxation = options.contactEquationRelaxation;
-    //   this.frictionEquationStiffness = options.frictionEquationStiffness;
-    //   this.frictionEquationRelaxation = options.frictionEquationRelaxation;
-    // }
-
-    // Add trail
+    // Add ball trail
 
     geometry = [new THREE.Vector3(-0.2, -0.2, -0.2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.2, 0.2, 0.2)];
     // console.log(geometry);
-    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 30);
+    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 50);
 
     // Add gray boxes
 
@@ -298,7 +265,7 @@ class Game {
             position: this.box.position,
             mass: 1,
           });
-          let boxShape = new Box(new Vec3(0.67, 0.65, 0.65));
+          let boxShape = new Box(new Vec3(0.65, 0.65, 0.65));
           this.box.body.addShape(boxShape);
           this.box.body.tag = "enemy";
           main.world.add(this.box.body);
@@ -409,11 +376,9 @@ class Game {
 
     if (controls.isDown) {
       isClicked = true;
-      let dx = 0.5 * (controls.prevX - controls.mouseX);
+      let dx = 0.7 * (controls.prevX - controls.mouseX);
       this.ball.body.velocity.x = dx;
     }
-
-    console.log(this.ball.body.position.z);
 
     if (isEnd) {
       this.ball.body.velocity.z = 0;

@@ -1,8 +1,7 @@
 // TO DO'S:
 
-//well done
+// endgame fading
 //scale landscape and portrait
-// intertwining of objects
 
 // SEMI DONES
 
@@ -17,5 +16,7 @@
 // ball control
 // lights???
 // endgame: try again continue
+//well done
+// intertwining of objects
 
 // endTutorial & initTutorial
