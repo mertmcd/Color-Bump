@@ -76,32 +76,8 @@ class Ui {
   }
 
   prepare() {
-    ////BANNER
-    // s
-
     Ui.initTutorial();
     Ui.hideButtonTutorial();
-
-    ///BOTTOM BANNER
-    // let bb = new BottomBanner(require("../../assets/ui/bottomBanner0.png"));
-    // this.uiHelper.add(bb, true, main.gotoLink);
-
-    /*
-        ////BUTTON
-        let btn = new TexturedButton("PLAY NOW!", require('../../assets/ui/bottomBanner0.png'), "#ff0000");
-        this.uiHelper.add(btn, true);
-        */
-
-    //btn.css("opacity", 0.5);
-    //btn.attr("data-asd", "asd"); ///sets attribute
-    //btn.attr("data-asd"); ///gets attribute
-
-    /*
-        btn, bb, banner aren't dom objects. to use dom object of them use
-        btn.wrapper 
-        bb.wrapper
-        banner.wrapper
-        */
   }
 
   resize(w, h) {

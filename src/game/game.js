@@ -59,7 +59,7 @@ class Game {
     this.cam.position.set(0, 20, -15);
     this.cam.lookAt(0, 0, 0);
 
-    // main.initCannonDebug();
+    main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -191,6 +191,7 @@ class Game {
       this.platList.push(this.platform);
       dist = 50;
     }
+    main.world.remove(this.platform.body);
 
     // Add cyan ball
 
@@ -210,16 +211,22 @@ class Game {
     let ballShape = new Sphere(0.9);
     this.ball.body.addShape(ballShape);
     main.world.add(this.ball.body);
+    let ball = this.ball;
 
     this.ball.body.addEventListener("collide", function (e) {
       if (e.body.tag === "enemy") {
         if (!isEnd) {
           isEnd = true;
+          main.world.remove(ball.body);
+          main.scene.remove(ball);
+          // removeBall();
           Ui.endTutorial();
           Ui.hideButtonTutorial();
         }
       }
     });
+    //main.world.remove(this.ball.body);
+    //
 
     // Add ball trail
 
@@ -265,6 +272,7 @@ class Game {
             position: this.box.position,
             mass: 1,
           });
+
           let boxShape = new Box(new Vec3(0.65, 0.65, 0.65));
           this.box.body.addShape(boxShape);
           this.box.body.tag = "enemy";
@@ -370,13 +378,12 @@ class Game {
     if (isClicked) {
       Ui.hideHandTutorial();
       Ui.showButtonTutorial();
-      // isClicked = true;
       this.ball.body.velocity.z = 5;
     }
 
     if (controls.isDown) {
       isClicked = true;
-      let dx = 0.7 * (controls.prevX - controls.mouseX);
+      let dx = 1.5 * (controls.prevX - controls.mouseX);
       this.ball.body.velocity.x = dx;
     }
 

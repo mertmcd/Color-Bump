@@ -1,12 +1,18 @@
 // TO DO'S:
 
+// ball explosion
 // endgame fading
-//scale landscape and portrait
 
 // SEMI DONES
 
+//////////////////////////////////////////////////////////////////
+// inv                                       ////////////////////
+// add finish texture                       /////////////////////
+/////////////////////////////////////////////////////////////////
+
 // DONES:
 
+//scale landscape and portrait
 // box and ball crash incident: collision collider? body.addEventListener(body.addEventListener('collide', ...);)
 // finish line: texture
 // hand tutorial: css
