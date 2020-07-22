@@ -16,6 +16,13 @@ let geometry;
 let trail;
 let isClicked = false;
 let isEnd = false;
+let ball;
+let expBall;
+let expBallArray = [];
+let mert;
+let xx;
+let yy;
+let zz;
 
 class Game {
   constructor(_main) {}
@@ -59,7 +66,7 @@ class Game {
     this.cam.position.set(0, 20, -15);
     this.cam.lookAt(0, 0, 0);
 
-    main.initCannonDebug();
+    //main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -191,7 +198,6 @@ class Game {
       this.platList.push(this.platform);
       dist = 50;
     }
-    main.world.remove(this.platform.body);
 
     // Add cyan ball
 
@@ -211,7 +217,7 @@ class Game {
     let ballShape = new Sphere(0.9);
     this.ball.body.addShape(ballShape);
     main.world.add(this.ball.body);
-    let ball = this.ball;
+    ball = this.ball;
 
     this.ball.body.addEventListener("collide", function (e) {
       if (e.body.tag === "enemy") {
@@ -219,7 +225,7 @@ class Game {
           isEnd = true;
           main.world.remove(ball.body);
           main.scene.remove(ball);
-          // removeBall();
+          ballExplode();
           Ui.endTutorial();
           Ui.hideButtonTutorial();
         }
@@ -277,7 +283,6 @@ class Game {
           this.box.body.addShape(boxShape);
           this.box.body.tag = "enemy";
           main.world.add(this.box.body);
-
           this.boxList.push(this.box);
         }
       }
@@ -297,10 +302,33 @@ class Game {
     this.update();
     this.initTouchEvents();
 
-    // this.onResizeCallback(main.lastWidth, main.lastHeight);
-    // setTimeout(() => {
-    //   this.onResizeCallback(main.lastWidth, main.lastHeight);
-    // }, 500);
+    function ballExplode() {
+      for (let i = 0; i < 20; i++) {
+        let expGeo = new THREE.SphereGeometry(Math.random() * 0.2, Math.random() * 10, Math.random() * 10);
+        let expMat = new THREE.MeshPhongMaterial({
+          color: cyan,
+        });
+        expBall = new THREE.Mesh(expGeo, expMat);
+
+        expBall.position.set(ball.position.x, ball.position.y, ball.position.z);
+        main.scene.add(expBall);
+
+        expBall.body = new Body({
+          position: expBall.position,
+          mass: 5,
+        });
+
+        let expBallShape = new Sphere(Math.random() * 0.2);
+        expBall.body.addShape(expBallShape);
+        main.world.add(expBall.body);
+
+        expBall.body.velocity.x += Math.random() * 10 - 5;
+        // expBall.body.velocity.y += Math.random() * 10 - 5;
+        expBall.body.velocity.z += Math.random() * 10 - 5;
+
+        expBallArray.push(expBall);
+      }
+    }
   }
 
   initControls() {
@@ -371,6 +399,11 @@ class Game {
       brds.quaternion.copy(brds.body.quaternion);
     }
 
+    for (let balls of expBallArray) {
+      balls.position.copy(balls.body.position);
+      balls.quaternion.copy(balls.body.quaternion);
+    }
+
     let controls = app.controls;
 
     this.cam.position.z = this.ball.body.position.z - 10;
@@ -388,10 +421,10 @@ class Game {
     }
 
     if (isEnd) {
+      Ui.hideButtonTutorial();
       this.ball.body.velocity.z = 0;
       this.ball.body.velocity.y = 0;
       this.ball.body.velocity.x = 0;
-      Ui.hideButtonTutorial();
     }
 
     if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
