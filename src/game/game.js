@@ -63,8 +63,8 @@ class Game {
     this.initControls();
 
     this.cam = main.camera;
-    this.cam.position.set(0, 20, -15);
-    this.cam.lookAt(0, 0, 0);
+    this.cam.position.set(0, 30, -20);
+    this.cam.lookAt(0, 10, -7);
 
     //main.initCannonDebug();
     main.world.allowSleep = false;
@@ -236,7 +236,7 @@ class Game {
 
     // Add ball trail
 
-    geometry = [new THREE.Vector3(-0.2, -0.2, -0.2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.2, 0.2, 0.2)];
+    geometry = [new THREE.Vector3(-0.3, 0, 0), new THREE.Vector3(0.3, 0, 0)];
     // console.log(geometry);
     trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 50);
 
@@ -378,7 +378,7 @@ class Game {
     // join bodies and meshes to each other
 
     this.ball.position.copy(this.ball.body.position);
-    this.ball.quaternion.copy(this.ball.body.quaternion);
+    // this.ball.quaternion.copy(this.ball.body.quaternion);
     trail.advance();
 
     for (let plts of this.platList) {
