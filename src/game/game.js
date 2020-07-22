@@ -323,7 +323,7 @@ class Game {
         main.world.add(expBall.body);
 
         expBall.body.velocity.x += Math.random() * 10 - 5;
-        // expBall.body.velocity.y += Math.random() * 10 - 5;
+        expBall.body.velocity.y += Math.random() * 5;
         expBall.body.velocity.z += Math.random() * 10 - 5;
 
         expBallArray.push(expBall);
