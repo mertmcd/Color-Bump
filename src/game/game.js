@@ -16,7 +16,6 @@ var updateFunction;
 let geometry;
 let trail;
 let isClicked = false;
-Globals.click = isClicked;
 let isEnd = false;
 let isWon = false;
 let ball;
@@ -67,7 +66,7 @@ class Game {
 
     this.cam = main.camera;
     this.cam.position.set(0, 30, -20);
-    this.cam.lookAt(0, 10, -7);
+    this.cam.lookAt(0, 10, -10);
 
     // main.initCannonDebug();
     main.world.allowSleep = false;
@@ -290,8 +289,6 @@ class Game {
       t = 50;
     }
 
-    //console.log(this.boxList);
-
     if (fromRestart) {
       return;
     }
@@ -370,6 +367,8 @@ class Game {
     if (delta > 0.03) delta = 0.03;
     var ratio = delta * 60;
 
+    let controls = app.controls;
+
     if (this.ball.body.position.z >= 120) {
       if (!isEnd) {
         isEnd = true;
@@ -379,15 +378,7 @@ class Game {
       }
     }
 
-    let controls = app.controls;
-
     this.cam.position.z = this.ball.body.position.z - 10;
-
-    if (isClicked) {
-      Ui.handGif("close");
-      Ui.playNowButton("open");
-      this.ball.body.velocity.z = 5; // 7000 direct finish
-    }
 
     if (controls.isDown) {
       isClicked = true;
@@ -399,6 +390,12 @@ class Game {
         this.oldX = this.ball.body.position.x;
         this.oldY = this.ball.body.position.y;
       }
+    }
+
+    if (isClicked) {
+      Ui.handGif("close");
+      Ui.playNowButton("open");
+      this.ball.body.velocity.z = 5; // 7000 direct finish
     }
 
     if (this.oldX) {

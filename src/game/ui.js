@@ -92,7 +92,7 @@ class Ui {
       image5.id = "goodjob";
       image5.src = goodJob;
       document.getElementById("ui").append(image5);
-      gjText = document.getElementById("tryagain");
+      gjText = document.getElementById("goodjob");
     }
     if (value === "open" && gjText.style.display != "block") gjText.style.display = "block";
     else if (value === "close" && gjText.style.display != "none") gjText.style.display = "none";

@@ -55,7 +55,7 @@
 
   #goodjob {
     position: absolute;
-    top: 50%;
+    top: 30%;
     transform: translate(-50%, 0);
     left: 50%;
     width: 250px;
@@ -80,7 +80,7 @@
 
   #continue {
     position: absolute;
-    bottom: 47%;
+    bottom: 40%;
     transform: translate(-50%, 0);
     left: 50%;
     width: 250px;
@@ -100,7 +100,7 @@
 
   #goodjob {
     position: absolute;
-    top: 50%;
+    top: 30%;
     transform: translate(-50%, 0);
     left: 50%;
     width: 250px;
