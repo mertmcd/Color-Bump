@@ -6,6 +6,7 @@ import {Body, Sphere, Box, Vec3} from "cannon";
 import {Vector3, Box3, Triangle} from "three";
 import {BrotliDecompressedSize} from "../brotli/unbrotli";
 import Helper from "./helper";
+import Globals from "./globals";
 
 var gameEnded = false;
 var main, clock, controls, ui;
@@ -15,7 +16,9 @@ var updateFunction;
 let geometry;
 let trail;
 let isClicked = false;
+Globals.click = isClicked;
 let isEnd = false;
+let isWon = false;
 let ball;
 let expBall;
 let expBallArray = [];
@@ -28,6 +31,8 @@ class Game {
     main.data = app.data;
     data = app.data;
     main.isTest = isTest;
+
+    Globals.game = this;
 
     main.renderer.outputEncoding = THREE.GammaEncoding;
     main.renderer.gammaFactor = 2.2;
@@ -54,6 +59,8 @@ class Game {
   }
 
   init(fromRestart) {
+    isClicked = false;
+    isEnd = false;
     confettiMaker = new Confetti(main.scene);
     this.initLights();
     this.initControls();
@@ -216,14 +223,6 @@ class Game {
     main.world.add(this.ball.body);
     ball = this.ball;
 
-    let shadowGeo = new THREE.SphereGeometry(0.7, 50, 50);
-    let shadowMat = new THREE.MeshBasicMaterial({
-      color: cyan,
-    });
-    this.shadow = new THREE.Mesh(shadowGeo, shadowMat);
-    main.scene.add(this.shadow);
-    this.shadow.visible = false;
-
     this.ball.body.addEventListener("collide", function (e) {
       if (e.body.tag === "enemy") {
         if (!isEnd) {
@@ -231,8 +230,9 @@ class Game {
           main.world.remove(ball.body);
           main.scene.remove(ball);
           ballExplode();
-          Ui.endTutorial();
-          Ui.hideButtonTutorial();
+          Ui.tryAgainText("open");
+          Ui.continueButton("open");
+          Ui.playNowButton("close");
         }
       }
     });
@@ -240,8 +240,7 @@ class Game {
     // Add ball trail
 
     geometry = [new THREE.Vector3(-0.3, 0, 0), new THREE.Vector3(0.3, 0, 0)];
-    // console.log(geometry);
-    trail = Helper.addTrail(main.scene, this.shadow, geometry, "#ffffff", 1, 0.2, 70);
+    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 0.3, 70);
 
     // Add gray boxes
 
@@ -307,7 +306,7 @@ class Game {
 
     function ballExplode() {
       for (let i = 0; i < 20; i++) {
-        let expGeo = new THREE.SphereGeometry(Math.random() * 0.2, Math.random() * 10, Math.random() * 10);
+        let expGeo = new THREE.SphereGeometry(Math.random() * 0.2, Math.random() * 5, Math.random() * 5);
         let expMat = new THREE.MeshPhongMaterial({
           color: cyan,
         });
@@ -359,6 +358,7 @@ class Game {
   initUi() {
     let uiDiv = document.getElementById("ui");
     ui = new Ui(uiDiv);
+    Globals.ui = ui;
     ui.prepare();
   }
 
@@ -374,46 +374,43 @@ class Game {
     if (this.ball.body.position.z >= 120) {
       if (!isEnd) {
         isEnd = true;
-        Ui.goodJob();
+        isWon = true;
+        Ui.goodJobText();
+        // Ui.continueButton();
       }
     }
-
-    // this.ball.body.addEventListener("collide", function (v) {
-    //   if (v.body.tag === "friend") {
-    //     console.log("hit");
-    //     if (ball.body.velocity.z < 5) ball.body.velocity.z = 25;
-    //   }
-    // });
 
     let controls = app.controls;
 
     this.cam.position.z = this.ball.body.position.z - 10;
 
     if (isClicked) {
-      Ui.hideHandTutorial();
-      Ui.showButtonTutorial();
+      Ui.handGif("close");
+      Ui.playNowButton("open");
       this.ball.body.velocity.z = 5; // 7000 direct finish
     }
 
-    if (this.ball.body.velocity.z < 5 && this.ball.body.velocity.z != 0) console.log("mert");
-
     if (controls.isDown) {
       isClicked = true;
-      let dx = 0.5 * (controls.prevX - controls.mouseX);
+      let dx = 0.9 * (controls.prevX - controls.mouseX);
       this.ball.body.velocity.x = dx;
       this.oldX = false;
     } else {
       if (!this.oldX) {
         this.oldX = this.ball.body.position.x;
+        this.oldY = this.ball.body.position.y;
       }
     }
 
     if (this.oldX) {
       this.ball.body.position.x = this.oldX;
+      this.ball.body.position.y = this.oldY;
+      this.ball.body.velocity.x = 0;
+      this.ball.body.velocity.y = 0;
     }
 
     if (isEnd) {
-      Ui.hideButtonTutorial();
+      Ui.playNowButton("close");
       this.ball.body.velocity.z = 0;
       this.ball.body.velocity.y = 0;
       this.ball.body.velocity.x = 0;
@@ -421,8 +418,8 @@ class Game {
 
     // join bodies and meshes to each other
 
-    this.ball.position.copy(this.ball.body.position);
-    this.shadow.position.copy(this.ball.body.position);
+    this.ball.position.set(this.ball.body.position.x, 2, this.ball.body.position.z);
+
     trail.advance();
 
     for (let plts of this.platList) {
@@ -557,6 +554,9 @@ class Game {
     gameEnded = false;
     main.gameEnded = false;
     let scene = main.scene;
+    Ui.hideLost();
+
+    if (isWon) Ui.hideWon();
 
     for (var i = scene.children.length - 1; i >= 0; i--) {
       let obj = scene.children[i];
@@ -572,6 +572,7 @@ class Game {
 
     main.objectMaker.clear();
     this.init(true);
+    //Globals.prepare();
   }
 }
 

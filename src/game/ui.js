@@ -8,6 +8,8 @@ import playNow from "../../assets/ui/playnow.png";
 import continueImg from "../../assets/ui/continue.png";
 import tryAgain from "../../assets/ui/tryagain.png";
 import goodJob from "../../assets/ui/goodjob.png";
+import Game from "./game";
+import Globals from "./globals";
 
 var main;
 
@@ -17,37 +19,91 @@ class Ui {
     this.div = div;
     var uiHelper = new UiHelper(div);
     this.uiHelper = uiHelper;
+    Globals.prepare = this;
   }
 
-  static initTutorial() {
-    let image1 = document.createElement("img");
-    image1.id = "hand";
+  //   static initTutorial() {
+  //     if (!document.getElementById("hand")) {
+  //       let image1 = document.createElement("img");
+  //       image1.id = "hand";
+  //       image1.src = handImage;
+  //       document.getElementById("ui").append(image1);
 
-    image1.src = handImage;
-    document.getElementById("ui").append(image1);
+  //       let image2 = document.createElement("img");
+  //       image2.id = "playnow";
 
-    let image2 = document.createElement("img");
-    image2.id = "playnow";
+  //       image2.src = playNow;
+  //       document.getElementById("ui").append(image2);
+  //     } else {
+  //       Globals.click = false;
+  //       let hand = document.getElementById("hand");
+  //       hand.style.display = "block";
+  //     }
+  //   }
 
-    image2.src = playNow;
-    document.getElementById("ui").append(image2);
+  static handGif(value) {
+    let hand = document.getElementById("hand");
+
+    if (!hand) {
+      let image1 = document.createElement("img");
+      image1.id = "hand";
+      image1.src = handImage;
+      document.getElementById("ui").append(image1);
+      hand = document.getElementById("hand");
+    }
+    if (value === "open" && hand.style.display != "block") hand.style.display = "block";
+    else if (value === "close" && hand.style.display != "none") hand.style.display = "none";
   }
 
-  static endTutorial() {
-    let image3 = document.createElement("img");
-    image3.id = "continue";
+  static playNowButton(value) {
+    let playButton = document.getElementById("playnow");
 
-    image3.src = continueImg;
-    document.getElementById("ui").append(image3);
-
-    let image4 = document.createElement("img");
-    image4.id = "tryagain";
-
-    image4.src = tryAgain;
-    document.getElementById("ui").append(image4);
+    if (!playButton) {
+      let image2 = document.createElement("img");
+      image2.id = "playnow";
+      image2.src = playNow;
+      document.getElementById("ui").append(image2);
+      playButton = document.getElementById("playnow");
+    }
+    if (value === "open" && playButton.style.display != "block") playButton.style.display = "block";
+    else if (value === "close" && playButton.style.display != "none") playButton.style.display = "none";
   }
 
-  static goodJob() {
+  static continueButton(value) {
+    let contButton = document.getElementById("continue");
+
+    if (!contButton) {
+      let image3 = document.createElement("img");
+      image3.id = "continue";
+
+      image3.onmousedown = function () {
+        Globals.game.restartGame();
+        Globals.ui.prepare();
+      };
+
+      image3.src = continueImg;
+      document.getElementById("ui").append(image3);
+      contButton = document.getElementById("continue");
+    }
+    if (value === "open" && contButton.style.display != "block") contButton.style.display = "block";
+    else if (value === "close" && contButton.style.display != "none") contButton.style.display = "none";
+  }
+
+  static tryAgainText(value) {
+    let tryText = document.getElementById("tryagain");
+
+    if (!tryText) {
+      let image4 = document.createElement("img");
+      image4.id = "tryagain";
+      image4.src = tryAgain;
+      document.getElementById("ui").append(image4);
+      tryText = document.getElementById("tryagain");
+    }
+    if (value === "open" && tryText.style.display != "block") tryText.style.display = "block";
+    else if (value === "close" && tryText.style.display != "none") tryText.style.display = "none";
+  }
+
+  static goodJobText() {
     let image5 = document.createElement("img");
     image5.id = "goodjob";
 
@@ -55,29 +111,22 @@ class Ui {
     document.getElementById("ui").append(image5);
   }
 
-  static hideHandTutorial() {
-    let hand = document.getElementById("hand");
-    hand.style.display = "none";
+  static hideLost() {
+    let cont = document.getElementById("continue");
+    cont.style.display = "none";
+    let tryAgain = document.getElementById("tryagain");
+    tryAgain.style.display = "none";
   }
 
-  static hideButtonTutorial() {
-    let playNow = document.getElementById("playnow");
-    playNow.style.display = "none";
-  }
-
-  static showHandTutorial() {
-    let hand = document.getElementById("hand");
-    hand.style.display = "block";
-  }
-
-  static showButtonTutorial() {
-    let playNow = document.getElementById("playnow");
-    playNow.style.display = "block";
+  static hideWon() {
+    let goodJob = document.getElementById("goodjob");
+    goodJob.style.display = "none";
   }
 
   prepare() {
-    Ui.initTutorial();
-    Ui.hideButtonTutorial();
+    Ui.handGif("open");
+    // Ui.initTutorial();
+    // Ui.hideButtonTutorial();
   }
 
   resize(w, h) {

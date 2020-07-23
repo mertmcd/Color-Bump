@@ -1,6 +1,5 @@
 // TO DO'S:
 
-// ball explosion
 // endgame fading
 
 // SEMI DONES
@@ -22,7 +21,8 @@
 // ball control
 // lights???
 // endgame: try again continue
-//well done
+// well done
 // intertwining of objects
+// ball explosion
 
 // endTutorial & initTutorial
