@@ -232,7 +232,6 @@ class Game {
           ballExplode();
           Ui.tryAgainText("open");
           Ui.continueButton("open");
-          Ui.playNowButton("close");
         }
       }
     });
@@ -375,8 +374,8 @@ class Game {
       if (!isEnd) {
         isEnd = true;
         isWon = true;
-        Ui.goodJobText();
-        // Ui.continueButton();
+        Ui.goodJobText("open");
+        Ui.continueButton("open");
       }
     }
 
@@ -528,7 +527,7 @@ class Game {
     gameEnded = true;
     main.gameEnded = true;
 
-    ui.addEndCard();
+    //ui.addEndCard();
     ////Call this part if the game is completely ended
 
     if (app.type == "tapjoy" && window.TJ_API) {
@@ -554,9 +553,11 @@ class Game {
     gameEnded = false;
     main.gameEnded = false;
     let scene = main.scene;
-    Ui.hideLost();
 
-    if (isWon) Ui.hideWon();
+    Ui.continueButton("close");
+    Ui.tryAgainText("close");
+
+    if (isWon) Ui.goodJobText("close");
 
     for (var i = scene.children.length - 1; i >= 0; i--) {
       let obj = scene.children[i];

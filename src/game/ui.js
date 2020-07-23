@@ -22,25 +22,6 @@ class Ui {
     Globals.prepare = this;
   }
 
-  //   static initTutorial() {
-  //     if (!document.getElementById("hand")) {
-  //       let image1 = document.createElement("img");
-  //       image1.id = "hand";
-  //       image1.src = handImage;
-  //       document.getElementById("ui").append(image1);
-
-  //       let image2 = document.createElement("img");
-  //       image2.id = "playnow";
-
-  //       image2.src = playNow;
-  //       document.getElementById("ui").append(image2);
-  //     } else {
-  //       Globals.click = false;
-  //       let hand = document.getElementById("hand");
-  //       hand.style.display = "block";
-  //     }
-  //   }
-
   static handGif(value) {
     let hand = document.getElementById("hand");
 
@@ -103,37 +84,27 @@ class Ui {
     else if (value === "close" && tryText.style.display != "none") tryText.style.display = "none";
   }
 
-  static goodJobText() {
-    let image5 = document.createElement("img");
-    image5.id = "goodjob";
+  static goodJobText(value) {
+    let gjText = document.getElementById("goodjob");
 
-    image5.src = goodJob;
-    document.getElementById("ui").append(image5);
-  }
-
-  static hideLost() {
-    let cont = document.getElementById("continue");
-    cont.style.display = "none";
-    let tryAgain = document.getElementById("tryagain");
-    tryAgain.style.display = "none";
-  }
-
-  static hideWon() {
-    let goodJob = document.getElementById("goodjob");
-    goodJob.style.display = "none";
+    if (!gjText) {
+      let image5 = document.createElement("img");
+      image5.id = "goodjob";
+      image5.src = goodJob;
+      document.getElementById("ui").append(image5);
+      gjText = document.getElementById("tryagain");
+    }
+    if (value === "open" && gjText.style.display != "block") gjText.style.display = "block";
+    else if (value === "close" && gjText.style.display != "none") gjText.style.display = "none";
   }
 
   prepare() {
     Ui.handGif("open");
-    // Ui.initTutorial();
-    // Ui.hideButtonTutorial();
   }
 
   resize(w, h) {
     this.uiHelper.resize(w, h);
   }
-
-  addEndCard() {}
 
   show() {
     this.div.classList.add("hide");
