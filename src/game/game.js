@@ -19,10 +19,6 @@ let isEnd = false;
 let ball;
 let expBall;
 let expBallArray = [];
-let mert;
-let xx;
-let yy;
-let zz;
 
 class Game {
   constructor(_main) {}
@@ -66,7 +62,7 @@ class Game {
     this.cam.position.set(0, 30, -20);
     this.cam.lookAt(0, 10, -7);
 
-    //main.initCannonDebug();
+    // main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -194,6 +190,7 @@ class Game {
 
       let platformShape = new Box(plat.mult(0.6));
       this.platform.body.addShape(platformShape);
+      this.platform.body.tag = "friend";
       main.world.add(this.platform.body);
       this.platList.push(this.platform);
       dist = 50;
@@ -219,6 +216,14 @@ class Game {
     main.world.add(this.ball.body);
     ball = this.ball;
 
+    let shadowGeo = new THREE.SphereGeometry(0.7, 50, 50);
+    let shadowMat = new THREE.MeshBasicMaterial({
+      color: cyan,
+    });
+    this.shadow = new THREE.Mesh(shadowGeo, shadowMat);
+    main.scene.add(this.shadow);
+    this.shadow.visible = false;
+
     this.ball.body.addEventListener("collide", function (e) {
       if (e.body.tag === "enemy") {
         if (!isEnd) {
@@ -231,14 +236,12 @@ class Game {
         }
       }
     });
-    //main.world.remove(this.ball.body);
-    //
 
     // Add ball trail
 
     geometry = [new THREE.Vector3(-0.3, 0, 0), new THREE.Vector3(0.3, 0, 0)];
     // console.log(geometry);
-    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 1, 50);
+    trail = Helper.addTrail(main.scene, this.shadow, geometry, "#ffffff", 1, 0.2, 70);
 
     // Add gray boxes
 
@@ -375,10 +378,51 @@ class Game {
       }
     }
 
+    // this.ball.body.addEventListener("collide", function (v) {
+    //   if (v.body.tag === "friend") {
+    //     console.log("hit");
+    //     if (ball.body.velocity.z < 5) ball.body.velocity.z = 25;
+    //   }
+    // });
+
+    let controls = app.controls;
+
+    this.cam.position.z = this.ball.body.position.z - 10;
+
+    if (isClicked) {
+      Ui.hideHandTutorial();
+      Ui.showButtonTutorial();
+      this.ball.body.velocity.z = 5; // 7000 direct finish
+    }
+
+    if (this.ball.body.velocity.z < 5 && this.ball.body.velocity.z != 0) console.log("mert");
+
+    if (controls.isDown) {
+      isClicked = true;
+      let dx = 0.5 * (controls.prevX - controls.mouseX);
+      this.ball.body.velocity.x = dx;
+      this.oldX = false;
+    } else {
+      if (!this.oldX) {
+        this.oldX = this.ball.body.position.x;
+      }
+    }
+
+    if (this.oldX) {
+      this.ball.body.position.x = this.oldX;
+    }
+
+    if (isEnd) {
+      Ui.hideButtonTutorial();
+      this.ball.body.velocity.z = 0;
+      this.ball.body.velocity.y = 0;
+      this.ball.body.velocity.x = 0;
+    }
+
     // join bodies and meshes to each other
 
     this.ball.position.copy(this.ball.body.position);
-    // this.ball.quaternion.copy(this.ball.body.quaternion);
+    this.shadow.position.copy(this.ball.body.position);
     trail.advance();
 
     for (let plts of this.platList) {
@@ -402,29 +446,6 @@ class Game {
     for (let balls of expBallArray) {
       balls.position.copy(balls.body.position);
       balls.quaternion.copy(balls.body.quaternion);
-    }
-
-    let controls = app.controls;
-
-    this.cam.position.z = this.ball.body.position.z - 10;
-
-    if (isClicked) {
-      Ui.hideHandTutorial();
-      Ui.showButtonTutorial();
-      this.ball.body.velocity.z = 5;
-    }
-
-    if (controls.isDown) {
-      isClicked = true;
-      let dx = 1.5 * (controls.prevX - controls.mouseX);
-      this.ball.body.velocity.x = dx;
-    }
-
-    if (isEnd) {
-      Ui.hideButtonTutorial();
-      this.ball.body.velocity.z = 0;
-      this.ball.body.velocity.y = 0;
-      this.ball.body.velocity.x = 0;
     }
 
     if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);

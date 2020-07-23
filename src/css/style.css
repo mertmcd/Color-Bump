@@ -8,7 +8,7 @@
   }
 }
 
-@keyframes slide {
+@keyframes scale {
   0% {
     transform: translate(-50%, 0) scale(1, 1);
   }
@@ -20,10 +20,10 @@
 @media (orientation: landscape) {
   #hand {
     position: absolute;
-    top: 10%;
+    top: 30%;
     transform: translate(-50%, 0);
     left: 50%;
-    width: 30%;
+    width: 20%;
   }
 
   #playnow {
@@ -39,7 +39,7 @@
     transform: translate(-50%, 0);
     left: 50%;
     width: 250px;
-    animation-name: slide;
+    animation-name: scale;
     animation-duration: 0.5s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
@@ -64,10 +64,10 @@
 @media (orientation: portrait) {
   #hand {
     position: absolute;
-    top: 10%;
+    top: 30%;
     transform: translate(-50%, 0);
     left: 50%;
-    width: 80%;
+    width: 60%;
   }
 
   #playnow {

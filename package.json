@@ -47,6 +47,7 @@
     "point-in-polygon": "^1.0.1",
     "poly-decomp": "^0.3.0",
     "postprocessing": "^6.8.9",
+    "randomcolor": "^0.6.2",
     "robust-point-in-polygon": "^1.0.3",
     "shifty": "^2.7.4-alpha.2",
     "three": "^0.115.0",
