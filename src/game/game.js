@@ -382,7 +382,7 @@ class Game {
 
     if (controls.isDown) {
       isClicked = true;
-      let dx = 0.9 * (controls.prevX - controls.mouseX);
+      let dx = 1.5 * (controls.prevX - controls.mouseX);
       this.ball.body.velocity.x = dx;
       this.oldX = false;
     } else {
