@@ -65,8 +65,8 @@ class Game {
     this.initControls();
 
     this.cam = main.camera;
-    this.cam.position.set(0, 30, -20);
-    this.cam.lookAt(0, 10, -10);
+    this.cam.position.set(0, 18, -6); // 0 25 -15 // 0 20 -11
+    this.cam.lookAt(0, 5, 8); // 0 0 0 // 0 5 0
 
     // main.initCannonDebug();
     main.world.allowSleep = false;
@@ -210,7 +210,7 @@ class Game {
     });
     this.ball = new THREE.Mesh(ballGeo, ballMat);
 
-    this.ball.position.set(0, 2, -5);
+    this.ball.position.set(0, 2, -10);
     main.scene.add(this.ball);
 
     this.ball.body = new Body({
@@ -238,7 +238,7 @@ class Game {
     // Add ball trail
 
     geometry = [new THREE.Vector3(-0.3, 0, 0), new THREE.Vector3(0.3, 0, 0)];
-    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 0.3, 70);
+    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 0.3, 20);
 
     // Add gray boxes
 
@@ -378,11 +378,9 @@ class Game {
       }
     }
 
-    this.cam.position.z = this.ball.body.position.z - 10;
-
     if (controls.isDown) {
       isClicked = true;
-      let dx = 1.5 * (controls.prevX - controls.mouseX);
+      let dx = 0.5 * (controls.prevX - controls.mouseX);
       this.ball.body.velocity.x = dx;
       this.oldX = false;
     } else {
@@ -412,9 +410,12 @@ class Game {
       this.ball.body.velocity.x = 0;
     }
 
-    // join bodies and meshes to each other
+    if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
+    if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
 
     this.ball.position.set(this.ball.body.position.x, 2, this.ball.body.position.z);
+
+    this.cam.position.z = this.ball.body.position.z - 15;
 
     trail.advance();
 
@@ -440,9 +441,6 @@ class Game {
       balls.position.copy(balls.body.position);
       balls.quaternion.copy(balls.body.quaternion);
     }
-
-    if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
-    if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
 
     confettiMaker && confettiMaker.update();
 

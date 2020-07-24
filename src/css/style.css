@@ -20,7 +20,7 @@
 @media (orientation: landscape) {
   #hand {
     position: absolute;
-    top: 20%;
+    top: 0%;
     transform: translate(-50%, 0);
     left: 50%;
     width: 20%;
@@ -64,7 +64,7 @@
 @media (orientation: portrait) {
   #hand {
     position: absolute;
-    top: 15%;
+    top: 7%;
     transform: translate(-50%, 0);
     left: 50%;
     width: 60%;
