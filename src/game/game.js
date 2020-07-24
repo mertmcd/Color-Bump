@@ -222,6 +222,8 @@ class Game {
     main.world.add(this.ball.body);
     ball = this.ball;
 
+    ball.tx = 0;
+
     this.ball.body.addEventListener("collide", function (e) {
       if (e.body.tag === "enemy") {
         if (!isEnd) {
@@ -301,8 +303,8 @@ class Game {
     this.initTouchEvents();
 
     function ballExplode() {
-      for (let i = 0; i < 20; i++) {
-        let expGeo = new THREE.SphereGeometry(Math.random() * 0.2, Math.random() * 5, Math.random() * 5);
+      for (let i = 0; i < 25; i++) {
+        let expGeo = new THREE.SphereGeometry(Math.random() * 0.3, Math.random() * 3, Math.random() * 3);
         let expMat = new THREE.MeshPhongMaterial({
           color: cyan,
         });
@@ -313,7 +315,7 @@ class Game {
 
         expBall.body = new Body({
           position: expBall.position,
-          mass: 5,
+          mass: 1,
         });
 
         let expBallShape = new Sphere(Math.random() * 0.2);
@@ -321,7 +323,7 @@ class Game {
         main.world.add(expBall.body);
 
         expBall.body.velocity.x += Math.random() * 10 - 5;
-        expBall.body.velocity.y += Math.random() * 5;
+        expBall.body.velocity.y += Math.random() * 10;
         expBall.body.velocity.z += Math.random() * 10 - 5;
 
         expBallArray.push(expBall);
@@ -380,8 +382,8 @@ class Game {
 
     if (controls.isDown) {
       isClicked = true;
-      let dx = 0.7 * (controls.prevX - controls.mouseX);
-      this.ball.body.velocity.x = dx;
+      let dx = -0.5 * (controls.mouseX - controls.prevX);
+      ball.tx += dx;
       this.oldX = false;
     } else {
       if (!this.oldX) {
@@ -410,8 +412,14 @@ class Game {
       this.ball.body.velocity.x = 0;
     }
 
-    if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
-    if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
+    //if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
+    //if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
+
+    ball.tx = ball.tx > 4 ? 4 : ball.tx;
+    ball.tx = ball.tx < -4 ? -4 : ball.tx;
+    console.log(ball.tx);
+
+    ball.body.position.x += (ball.tx - ball.body.position.x) * 0.1;
 
     this.ball.position.set(this.ball.body.position.x, 2, this.ball.body.position.z);
 
