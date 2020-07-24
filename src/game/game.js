@@ -238,7 +238,7 @@ class Game {
     // Add ball trail
 
     geometry = [new THREE.Vector3(-0.3, 0, 0), new THREE.Vector3(0.3, 0, 0)];
-    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 0.3, 20);
+    trail = Helper.addTrail(main.scene, this.ball, geometry, "#ffffff", 1, 0.3, 40);
 
     // Add gray boxes
 
@@ -380,7 +380,7 @@ class Game {
 
     if (controls.isDown) {
       isClicked = true;
-      let dx = 0.5 * (controls.prevX - controls.mouseX);
+      let dx = 0.7 * (controls.prevX - controls.mouseX);
       this.ball.body.velocity.x = dx;
       this.oldX = false;
     } else {
@@ -389,18 +389,18 @@ class Game {
         this.oldY = this.ball.body.position.y;
       }
     }
-
-    if (isClicked) {
-      Ui.handGif("close");
-      Ui.playNowButton("open");
-      this.ball.body.velocity.z = 5; // 7000 direct finish
-    }
-
     if (this.oldX) {
       this.ball.body.position.x = this.oldX;
       this.ball.body.position.y = this.oldY;
       this.ball.body.velocity.x = 0;
       this.ball.body.velocity.y = 0;
+    }
+
+    if (isClicked) {
+      Ui.handGif("close");
+      Ui.playNowButton("open");
+      this.ball.body.velocity.z = 5; // 7000 direct finish
+      this.oldX = false;
     }
 
     if (isEnd) {
