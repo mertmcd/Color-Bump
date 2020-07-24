@@ -68,7 +68,7 @@ class Game {
     this.cam.position.set(0, 18, -6); // 0 25 -15 // 0 20 -11
     this.cam.lookAt(0, 5, 8); // 0 0 0 // 0 5 0
 
-    // main.initCannonDebug();
+    //main.initCannonDebug();
     main.world.allowSleep = false;
 
     // this.level = new Level();
@@ -231,6 +231,7 @@ class Game {
           main.world.remove(ball.body);
           main.scene.remove(ball);
           ballExplode();
+          Ui.backGround("open");
           Ui.tryAgainText("open");
           Ui.continueButton("open");
         }
@@ -375,6 +376,7 @@ class Game {
       if (!isEnd) {
         isEnd = true;
         isWon = true;
+        Ui.backGround("open");
         Ui.goodJobText("open");
         Ui.continueButton("open");
       }
@@ -382,7 +384,7 @@ class Game {
 
     if (controls.isDown) {
       isClicked = true;
-      let dx = -0.5 * (controls.mouseX - controls.prevX);
+      let dx = -0.05 * (controls.mouseX - controls.prevX);
       ball.tx += dx;
       this.oldX = false;
     } else {
@@ -407,19 +409,21 @@ class Game {
 
     if (isEnd) {
       Ui.playNowButton("close");
-      this.ball.body.velocity.z = 0;
-      this.ball.body.velocity.y = 0;
-      this.ball.body.velocity.x = 0;
+      if (isWon) {
+        this.ball.body.velocity.z = 0;
+        ball.tx = 0;
+        this.ball.body.velocity.y = 0;
+        this.ball.body.velocity.x = 0;
+      }
     }
-
-    //if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
-    //if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
 
     ball.tx = ball.tx > 4 ? 4 : ball.tx;
     ball.tx = ball.tx < -4 ? -4 : ball.tx;
-    console.log(ball.tx);
 
     ball.body.position.x += (ball.tx - ball.body.position.x) * 0.1;
+
+    if (this.ball.body.position.x < -4) this.ball.body.position.set(-4, this.ball.body.position.y, this.ball.body.position.z);
+    if (this.ball.body.position.x > 4) this.ball.body.position.set(4, this.ball.body.position.y, this.ball.body.position.z);
 
     this.ball.position.set(this.ball.body.position.x, 2, this.ball.body.position.z);
 
@@ -559,8 +563,12 @@ class Game {
 
     Ui.continueButton("close");
     Ui.tryAgainText("close");
+    Ui.backGround("close");
 
-    if (isWon) Ui.goodJobText("close");
+    if (isWon) {
+      Ui.goodJobText("close");
+      Ui.backGround("close");
+    }
 
     for (var i = scene.children.length - 1; i >= 0; i--) {
       let obj = scene.children[i];

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode production -p",
     "start": "webpack-dev-server --mode development --port 8008",
-    "dev": "webpack-dev-server --mode development --public --host 192.168.1.43"
+    "dev": "webpack-dev-server --mode development --public --host 0.0.0.0 --port 8009"
   },
   "author": "MAPACARTA",
   "devDependencies": {

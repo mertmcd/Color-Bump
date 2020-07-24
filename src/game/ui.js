@@ -84,6 +84,21 @@ class Ui {
     else if (value === "close" && tryText.style.display != "none") tryText.style.display = "none";
   }
 
+  static backGround(value) {
+    let uielement = document.getElementById("endgamebg");
+
+    if (!uielement) {
+      let image6 = document.createElement("div");
+      image6.id = "endgamebg";
+      document.getElementById("ui").append(image6);
+      uielement = document.getElementById("endgamebg");
+      uielement.style.background = "rgba(0,0,0, 0.5)";
+    }
+
+    if (value === "open" && uielement.style.display != "block") uielement.style.display = "block";
+    else if (value === "close" && uielement.style.display != "none") uielement.style.display = "none";
+  }
+
   static goodJobText(value) {
     let gjText = document.getElementById("goodjob");
 
